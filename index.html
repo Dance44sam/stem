@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Click the Button Game</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+    #gameArea {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      border: 2px solid #333;
+      margin-top: 20px;
+      overflow: hidden;
+    }
+    #clickButton {
+      position: absolute;
+      padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    #startBtn {
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    #scoreDisplay {
+      font-size: 20px;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<h1>Click the Button Game</h1>
+<p>Click the button as many times as you can in 10 seconds!</p>
+<button id="startBtn">Start Game</button>
+<div id="scoreDisplay">Score: 0</div>
+
+<div id="gameArea">
+  <button id="clickButton" style="display: none;">Click Me!</button>
+</div>
+
+<script>
+  const startBtn = document.getElementById('startBtn');
+  const clickButton = document.getElementById('clickButton');
+  const scoreDisplay = document.getElementById('scoreDisplay');
+  const gameArea = document.getElementById('gameArea');
+
+  let score = 0;
+  let gameActive = false;
+  let timer;
+
+  function moveButton() {
+    const maxX = gameArea.clientWidth - clickButton.offsetWidth;
+    const maxY = gameArea.clientHeight - clickButton.offsetHeight;
+
+    const randomX = Math.random() * maxX;
+    const randomY = Math.random() * maxY;
+
+    clickButton.style.left = `${randomX}px`;
+    clickButton.style.top = `${randomY}px`;
+  }
+
+  clickButton.addEventListener('click', () => {
+    if (gameActive) {
+      score++;
+      scoreDisplay.textContent = `Score: ${score}`;
+      moveButton();
+    }
+  });
+
+  startBtn.addEventListener('click', () => {
+    score = 0;
+    scoreDisplay.textContent = `Score: 0`;
+    clickButton.style.display = 'block';
+    gameActive = true;
+    moveButton();
+
+    clearTimeout(timer); // clear any existing timer
+    timer = setTimeout(() => {
+      gameActive = false;
+      clickButton.style.display = 'none';
+      alert(`Time's up! Your score is: ${score}`);
+    }, 10000); // 10 seconds
+  });
+</script>
+
+</body>
+</html>
