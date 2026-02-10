@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BlockForge Client</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">BLOCKFORGE CLIENT</div>
+    <nav>
+      <a href="/">Home</a>
+      <a class="active" href="/client.html">Client</a>
+      <a href="/creator.html">Creator</a>
+    </nav>
+  </header>
+  <main class="container">
+    <section class="panel">
+      <h2>Experience Library</h2>
+      <p class="small">Pick an experience and launch instantly on PC.</p>
+      <div id="games" class="grid games"></div>
+      <p id="error" class="error"></p>
+    </section>
+  </main>
+  <script src="/js/api.js"></script>
+  <script src="/js/client.js"></script>
+</body>
+</html>
