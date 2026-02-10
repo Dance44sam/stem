@@ -1,2 +1,0 @@
-VantaPlayer Mobile placeholder package metadata.
-Platforms: iOS, Android
