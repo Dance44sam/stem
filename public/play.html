@@ -1,1 +1,28 @@
 <!doctype html><html><head><meta http-equiv="refresh" content="0; url=/" /></head><body>Redirecting to BlockForge X...</body></html>
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Play Experience</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">PLAY MODE</div>
+    <nav>
+      <a href="/client.html">Back to Client</a>
+    </nav>
+  </header>
+  <main class="container">
+    <section class="panel">
+      <h2 id="gameTitle">Loading...</h2>
+      <p class="small">Move with WASD or Arrow keys. Reach bottom-right corner to win.</p>
+      <canvas id="gameCanvas" width="640" height="640"></canvas>
+      <p id="message"></p>
+    </section>
+  </main>
+  <script src="/js/api.js"></script>
+  <script src="/js/play.js"></script>
+</body>
+</html>

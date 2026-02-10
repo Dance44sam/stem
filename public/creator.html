@@ -1,1 +1,36 @@
 <!doctype html><html><head><meta http-equiv="refresh" content="0; url=/" /></head><body>Redirecting to BlockForge X...</body></html>
+<!doctype html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>BlockForge Creator</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <header>
+    <div class="logo">BLOCKFORGE CREATOR</div>
+    <nav>
+      <a href="/">Home</a>
+      <a href="/client.html">Client</a>
+      <a class="active" href="/creator.html">Creator</a>
+    </nav>
+  </header>
+  <main class="container">
+    <section class="panel">
+      <h2>Create an Experience</h2>
+      <label>Title<input id="title" value="My New Arena" /></label>
+      <label>Description<textarea id="description" rows="2">Build your own obstacle game.</textarea></label>
+      <p class="small">Click tiles to place/remove walls.</p>
+      <div id="mapGrid"></div>
+      <div class="row" style="margin-top: 1rem;">
+        <button id="clearBtn" class="secondary">Clear</button>
+        <button id="publishBtn">Publish</button>
+      </div>
+      <p id="status" class="small"></p>
+    </section>
+  </main>
+  <script src="/js/api.js"></script>
+  <script src="/js/creator.js"></script>
+</body>
+</html>
