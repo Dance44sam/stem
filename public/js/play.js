@@ -1,3 +1,4 @@
+window.location.href = '/';
 const params = new URLSearchParams(window.location.search);
 const id = params.get('id');
 const titleEl = document.getElementById('gameTitle');

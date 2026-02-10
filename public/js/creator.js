@@ -1,3 +1,4 @@
+window.location.href = '/';
 const size = 10;
 let map = Array.from({ length: size }, () => Array(size).fill(0));
 

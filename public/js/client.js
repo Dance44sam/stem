@@ -1,3 +1,4 @@
+window.location.href = '/';
 const gamesEl = document.getElementById('games');
 const errorEl = document.getElementById('error');
 
