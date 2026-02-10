@@ -1,96 +1,482 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Click the Button Game</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VantaCore - Build. Play. Create.</title>
   <style>
+    :root {
+      --bg: #06070f;
+      --panel: rgba(19, 22, 38, 0.74);
+      --panel-strong: rgba(22, 28, 47, 0.9);
+      --line: rgba(157, 185, 255, 0.22);
+      --text: #ecf2ff;
+      --muted: #9ea8c9;
+      --accent: #6d8bff;
+      --accent-2: #44d4ff;
+      --success: #5ef0be;
+      --radius: 18px;
+      --glow: 0 20px 45px rgba(109, 139, 255, 0.25);
+    }
+
+    * { box-sizing: border-box; }
+
     body {
-      font-family: sans-serif;
-      text-align: center;
-      margin-top: 50px;
+      margin: 0;
+      font-family: "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(1200px 800px at 15% -10%, rgba(68, 212, 255, 0.22), transparent 55%),
+        radial-gradient(1000px 700px at 100% 10%, rgba(109, 139, 255, 0.26), transparent 50%),
+        linear-gradient(140deg, #04050a 0%, #0a0d18 46%, #080b13 100%);
+      min-height: 100vh;
     }
-    #gameArea {
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.14;
+      background-image:
+        radial-gradient(circle at 10% 20%, rgba(255,255,255,.15) 0 1px, transparent 1px),
+        radial-gradient(circle at 90% 70%, rgba(255,255,255,.14) 0 1px, transparent 1px);
+      background-size: 4px 4px, 5px 5px;
+      mix-blend-mode: soft-light;
+    }
+
+    .shell {
+      width: min(1200px, 92vw);
+      margin: 24px auto 56px;
       position: relative;
-      width: 100%;
-      height: 400px;
-      border: 2px solid #333;
-      margin-top: 20px;
-      overflow: hidden;
+      z-index: 2;
     }
-    #clickButton {
-      position: absolute;
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
+
+    .glass {
+      backdrop-filter: blur(18px) saturate(130%);
+      -webkit-backdrop-filter: blur(18px) saturate(130%);
+      background: linear-gradient(160deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--glow), inset 0 1px 0 rgba(255,255,255,0.18);
+    }
+
+    nav {
+      padding: 14px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 26px;
+      position: sticky;
+      top: 16px;
+      z-index: 9;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+      font-size: 1.08rem;
+    }
+
+    .logo {
+      width: 34px;
+      aspect-ratio: 1;
+      border-radius: 11px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,0.8), rgba(255,255,255,0.1)),
+        linear-gradient(140deg, #4cc8ff, #6f84ff 44%, #a177ff);
+      box-shadow: inset 0 2px 7px rgba(255,255,255,.35), 0 10px 25px rgba(91,130,255,.4);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a,
+    .cta {
+      text-decoration: none;
+      color: var(--text);
+      border: 1px solid rgba(255,255,255,0.15);
+      background: linear-gradient(145deg, rgba(255,255,255,.13), rgba(255,255,255,.03));
+      border-radius: 999px;
+      padding: 9px 15px;
+      font-size: .9rem;
+      transition: .2s ease;
+    }
+
+    .nav-links a:hover,
+    .cta:hover {
+      border-color: rgba(255,255,255,0.35);
+      transform: translateY(-1px);
+      box-shadow: 0 10px 30px rgba(109, 139, 255, .28);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 24px;
+      padding: 28px;
+      margin-bottom: 26px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3.4rem);
+      letter-spacing: -.6px;
+      line-height: 1.07;
+    }
+
+    .highlight {
+      background: linear-gradient(90deg, #8cb8ff, #73f4ff 42%, #b88eff);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 1rem;
+      margin: 14px 0 24px;
+      max-width: 58ch;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .cta.primary {
+      background: linear-gradient(140deg, rgba(109, 139, 255, 0.55), rgba(68, 212, 255, 0.35));
+      border-color: rgba(165, 189, 255, 0.44);
+    }
+
+    .stats {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: 15px;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .stat .big {
+      font-weight: 700;
+      font-size: 1.35rem;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+      margin-bottom: 26px;
+    }
+
+    .card {
+      padding: 18px;
+      border-radius: 16px;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.1);
+      box-shadow: inset 0 1px rgba(255,255,255,.15);
+    }
+
+    h2 { margin: 0 0 8px; font-size: 1.1rem; }
+
+    p { margin: 0; color: var(--muted); line-height: 1.5; }
+
+    .feature-list { margin: 12px 0 0; padding-left: 18px; color: var(--text); }
+
+    .feature-list li { margin: 8px 0; }
+
+    .showcase {
+      padding: 24px;
+      margin-bottom: 26px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .tab {
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.04);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 8px 14px;
       cursor: pointer;
-      font-size: 16px;
+      font-weight: 600;
     }
-    #startBtn {
-      padding: 10px 20px;
-      font-size: 16px;
+
+    .tab.active {
+      background: linear-gradient(140deg, rgba(109, 139, 255, 0.5), rgba(68, 212, 255, 0.28));
+      border-color: rgba(189, 213, 255, .55);
     }
-    #scoreDisplay {
-      font-size: 20px;
-      margin-top: 10px;
+
+    .panel {
+      display: none;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .panel.active { display: grid; }
+
+    .shot {
+      padding: 14px;
+      border-radius: 13px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(255,255,255,0.09);
+      min-height: 125px;
+    }
+
+    .shot .tag {
+      display: inline-block;
+      font-size: .76rem;
+      padding: 4px 8px;
+      border-radius: 999px;
+      margin-bottom: 10px;
+      color: #dff8ff;
+      border: 1px solid rgba(94,240,190,0.35);
+      background: rgba(94,240,190,0.1);
+    }
+
+    .download {
+      padding: 24px;
+      margin-bottom: 26px;
+    }
+
+    .client-section {
+      padding: 24px;
+      margin-bottom: 26px;
+    }
+
+    .client-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .client-box {
+      padding: 18px;
+      border-radius: 14px;
+      background: var(--panel-strong);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .downloads {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      margin-top: 16px;
+    }
+
+    .download-card {
+      padding: 16px;
+      border-radius: 14px;
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+
+    .pill {
+      display: inline-block;
+      margin-bottom: 8px;
+      font-size: .78rem;
+      color: #d5f2ff;
+      border: 1px solid rgba(68, 212, 255, .35);
+      border-radius: 999px;
+      padding: 4px 9px;
+      background: rgba(68, 212, 255, 0.1);
+    }
+
+    .download-card a {
+      margin-top: 12px;
+      display: inline-block;
+      text-decoration: none;
+      color: white;
+      font-weight: 600;
+      border-radius: 10px;
+      padding: 9px 12px;
+      background: linear-gradient(140deg, #6386ff, #3ed5ff);
+    }
+
+    footer {
+      text-align: center;
+      color: #8691b9;
+      padding: 16px;
+    }
+
+    @media (max-width: 920px) {
+      .hero { grid-template-columns: 1fr; }
+      .grid-3,
+      .panel,
+      .client-grid,
+      .downloads { grid-template-columns: 1fr; }
+      nav { position: static; }
     }
   </style>
 </head>
 <body>
+  <div class="noise"></div>
+  <div class="shell">
+    <nav class="glass">
+      <div class="brand"><span class="logo"></span>VantaCore</div>
+      <div class="nav-links">
+        <a href="#platform">Platform</a>
+        <a href="#apps">Apps</a>
+        <a href="#download">Download</a>
+      </div>
+    </nav>
 
-<h1>Click the Button Game</h1>
-<p>Click the button as many times as you can in 10 seconds!</p>
-<button id="startBtn">Start Game</button>
-<div id="scoreDisplay">Score: 0</div>
+    <section class="hero glass" id="platform">
+      <div>
+        <h1>The <span class="highlight">glossy dark universe</span> for playing and building games.</h1>
+        <p class="subtitle">
+          VantaCore is a Roblox-like ecosystem with a game website, cross-device player app, social layers, marketplace economy, and a Windows-only creator app for building worlds and experiences.
+        </p>
+        <div class="hero-buttons">
+          <a class="cta primary" href="#download">Download Player (.exe)</a>
+          <a class="cta" href="#download">Get Creator (.exe)</a>
+          <a class="cta" href="#apps">View Features</a>
+        </div>
+      </div>
+      <div class="stats">
+        <div class="stat"><div class="big">12M+</div><p>Community-built worlds</p></div>
+        <div class="stat"><div class="big">90 FPS</div><p>VantaPlayer high-performance runtime</p></div>
+        <div class="stat"><div class="big">Dark UI</div><p>Single premium glossy theme across all apps</p></div>
+        <div class="stat"><div class="big">Creator Pro</div><p>Windows-exclusive editing suite (.exe)</p></div>
+      </div>
+    </section>
 
-<div id="gameArea">
-  <button id="clickButton" style="display: none;">Click Me!</button>
-</div>
+    <section class="grid-3" id="apps">
+      <article class="card glass">
+        <h2>Website Hub</h2>
+        <p>Discover games, manage your profile, customize avatars, buy items, publish experiences, and join communities from a central browser dashboard.</p>
+        <ul class="feature-list">
+          <li>Trending games + recommendations</li>
+          <li>Avatar catalog + creator marketplace</li>
+          <li>Friends, groups, chats, and events</li>
+        </ul>
+      </article>
+      <article class="card glass">
+        <h2>VantaPlayer</h2>
+        <p>Play any VantaCore game through the player app with optimized rendering, anti-cheat, voice chat, and synchronized inventory.</p>
+        <ul class="feature-list">
+          <li>PC version: <strong>.exe launcher + game runtime</strong></li>
+          <li>Mobile version: Android + iOS support</li>
+          <li>Cross-save and cross-device multiplayer</li>
+        </ul>
+      </article>
+      <article class="card glass">
+        <h2>VantaCreator</h2>
+        <p>A complete game creation studio with terrain tools, visual scripting, marketplace assets, analytics, and one-click publish.</p>
+        <ul class="feature-list">
+          <li>Windows-only desktop editor (<strong>.exe</strong>)</li>
+          <li>Asset import + monetization systems</li>
+          <li>Multiplayer testing and cloud deploy</li>
+        </ul>
+      </article>
+    </section>
 
-<script>
-  const startBtn = document.getElementById('startBtn');
-  const clickButton = document.getElementById('clickButton');
-  const scoreDisplay = document.getElementById('scoreDisplay');
-  const gameArea = document.getElementById('gameArea');
+    <section class="showcase glass">
+      <h2>Everything you asked for, in one ecosystem</h2>
+      <p style="margin-bottom: 14px;">Switch between polished previews of each product surface. All interfaces keep the same glossy dark design language.</p>
+      <div class="tabs">
+        <button class="tab active" data-tab="web">Website UI</button>
+        <button class="tab" data-tab="player">Player UI</button>
+        <button class="tab" data-tab="creator">Creator UI</button>
+      </div>
 
-  let score = 0;
-  let gameActive = false;
-  let timer;
+      <div class="panel active" id="web">
+        <div class="shot"><span class="tag">Discover</span><p>Featured games, dynamic ranking, and personalized recommendations.</p></div>
+        <div class="shot"><span class="tag">Avatar Shop</span><p>Buy and equip cosmetics, emotes, and UGC bundles.</p></div>
+        <div class="shot"><span class="tag">Community</span><p>Friends, private servers, party invites, and game chat.</p></div>
+      </div>
+      <div class="panel" id="player">
+        <div class="shot"><span class="tag">PC .exe</span><p>Native launcher, anti-cheat stack, and direct game join links.</p></div>
+        <div class="shot"><span class="tag">Mobile</span><p>Touch controls, performance profiles, and cloud sync.</p></div>
+        <div class="shot"><span class="tag">Voice + Party</span><p>Built-in low-latency communication and squad management.</p></div>
+      </div>
+      <div class="panel" id="creator">
+        <div class="shot"><span class="tag">Windows .exe</span><p>Studio-grade editor with scene tools and live simulation.</p></div>
+        <div class="shot"><span class="tag">Build Tools</span><p>Terrain sculpting, blueprint templates, and scripting APIs.</p></div>
+        <div class="shot"><span class="tag">Publish</span><p>One-click deploy with analytics and marketplace integration.</p></div>
+      </div>
+    </section>
 
-  function moveButton() {
-    const maxX = gameArea.clientWidth - clickButton.offsetWidth;
-    const maxY = gameArea.clientHeight - clickButton.offsetHeight;
+    <section class="download glass" id="download">
+      <h2>Downloads</h2>
+      <p>Choose your build. Player works on PC and mobile; Creator is Windows-only, as requested.</p>
+      <div class="downloads">
+        <div class="download-card">
+          <span class="pill">PC Player</span>
+          <h3>VantaPlayer Setup.exe</h3>
+          <p>Install the desktop player for high-fidelity gameplay and creator-made worlds.</p>
+          <a href="downloads/VantaPlayerSetup.exe" download>Download .exe</a>
+        </div>
+        <div class="download-card">
+          <span class="pill">Mobile Player</span>
+          <h3>VantaPlayer Mobile</h3>
+          <p>Play on iOS and Android with synced progress and social features.</p>
+          <a href="downloads/VantaPlayerMobile.txt" download>Get Mobile App</a>
+        </div>
+        <div class="download-card">
+          <span class="pill">Creator (Windows Only)</span>
+          <h3>VantaCreator Studio.exe</h3>
+          <p>Build your own games, monetize content, and publish directly to VantaCore.</p>
+          <a href="downloads/VantaCreatorStudio.exe" download>Download Creator .exe</a>
+        </div>
+      </div>
+    </section>
 
-    const randomX = Math.random() * maxX;
-    const randomY = Math.random() * maxY;
+    <section class="client-section glass" id="clients">
+      <h2>Installable Clients (Roblox-like workflow)</h2>
+      <p>Launch games in the dedicated VantaPlayer client and build/publish from the VantaCreator desktop studio.</p>
+      <div class="client-grid">
+        <article class="client-box">
+          <span class="pill">Game Player Client</span>
+          <h3>VantaPlayer Client</h3>
+          <p>Open game links from the website directly in the player client, with account sync, friends, and matchmaking.</p>
+          <a href="downloads/VantaPlayerSetup.exe" download>Download Player Client (.exe)</a>
+        </article>
+        <article class="client-box">
+          <span class="pill">Creator Client</span>
+          <h3>VantaCreator Studio Client</h3>
+          <p>Windows-only creator app with world editing, scripting, testing, and direct publish to the VantaCore website.</p>
+          <a href="downloads/VantaCreatorStudio.exe" download>Download Creator Client (.exe)</a>
+        </article>
+      </div>
+    </section>
 
-    clickButton.style.left = `${randomX}px`;
-    clickButton.style.top = `${randomY}px`;
-  }
+    <footer>
+      VantaCore • Build worlds. Play forever. • Dark glossy UI by design.
+    </footer>
+  </div>
 
-  clickButton.addEventListener('click', () => {
-    if (gameActive) {
-      score++;
-      scoreDisplay.textContent = `Score: ${score}`;
-      moveButton();
-    }
-  });
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const panels = document.querySelectorAll('.panel');
 
-  startBtn.addEventListener('click', () => {
-    score = 0;
-    scoreDisplay.textContent = `Score: 0`;
-    clickButton.style.display = 'block';
-    gameActive = true;
-    moveButton();
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const key = tab.dataset.tab;
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
 
-    clearTimeout(timer); // clear any existing timer
-    timer = setTimeout(() => {
-      gameActive = false;
-      clickButton.style.display = 'none';
-      alert(`Time's up! Your score is: ${score}`);
-    }, 10000); // 10 seconds
-  });
-</script>
-
+        tab.classList.add('active');
+        document.getElementById(key).classList.add('active');
+      });
+    });
+  </script>
 </body>
 </html>
