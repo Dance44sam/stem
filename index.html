@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VantaCore — Play Infinite Worlds</title>
+  <title>VantaCore — Build Worlds. Own the Universe. Play Together.</title>
   <style>
     :root {
       --bg: #060913;
@@ -15,7 +15,8 @@
       --primary: #6e8dff;
       --secondary: #45d8ff;
       --ok: #6bf5cd;
-      --danger: #ff6b9f;
+      --warn: #ffd16f;
+      --bad: #ff6b9f;
       --radius: 16px;
       --glow: 0 18px 40px rgba(110, 141, 255, 0.28);
     }
@@ -32,7 +33,7 @@
       min-height: 100vh;
     }
 
-    .shell { width: min(1280px, 94vw); margin: 22px auto 48px; }
+    .shell { width: min(1320px, 95vw); margin: 22px auto 48px; }
     .glass {
       background: linear-gradient(165deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
       border: 1px solid var(--line);
@@ -47,101 +48,91 @@
       padding: 14px 16px; margin-bottom: 18px;
       position: sticky; top: 12px; z-index: 50;
     }
-    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+
+    .brand { display:flex; align-items:center; gap:10px; font-weight:800; }
     .logo {
       width: 34px; aspect-ratio: 1; border-radius: 10px;
       background: linear-gradient(140deg, #4ad6ff, #7485ff 50%, #ae7cff);
       box-shadow: inset 0 2px 7px rgba(255,255,255,0.35), 0 8px 20px rgba(74,120,255,0.45);
     }
-    .nav-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+    .nav-row { display:flex; gap:8px; flex-wrap: wrap; align-items: center; }
 
     button, .btn {
       border: 1px solid rgba(255,255,255,0.16);
       color: var(--text);
       background: linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
-      border-radius: 12px;
-      padding: 9px 12px;
-      font-weight: 600;
-      cursor: pointer;
-      text-decoration: none;
-      transition: .18s ease;
+      border-radius: 12px; padding: 9px 12px; font-weight: 600;
+      cursor: pointer; text-decoration:none; transition:.18s ease;
     }
     button:hover, .btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,.3); }
-    .btn.primary {
-      background: linear-gradient(145deg, rgba(110,141,255,.55), rgba(69,216,255,.38));
-      border-color: rgba(180,206,255,.45);
-    }
+    .btn.primary { background: linear-gradient(145deg, rgba(110,141,255,.55), rgba(69,216,255,.38)); border-color: rgba(180,206,255,.45); }
+    .btn.warn { background: linear-gradient(145deg, rgba(255,190,90,.35), rgba(255,115,160,.25)); }
+    .btn.bad { background: linear-gradient(145deg, rgba(255,120,180,.35), rgba(255,70,120,.25)); }
 
     .hero {
-      display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px;
-      padding: 24px; margin-bottom: 18px;
+      display:grid; grid-template-columns:1.15fr 1fr; gap:16px;
+      padding:24px; margin-bottom: 18px;
     }
-    h1 { margin: 0; font-size: clamp(2rem, 4vw, 3.3rem); line-height: 1.05; }
+
+    h1 { margin:0; font-size:clamp(2rem,4vw,3.3rem); line-height:1.05; }
     .hl {
       background: linear-gradient(90deg, #9cc2ff, #79f1ff 42%, #d6a7ff);
-      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+      -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent;
     }
-    .sub { color: var(--muted); max-width: 64ch; margin: 12px 0 18px; }
-    .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
-    .stat { padding: 14px; border-radius: 12px; background: var(--panel); border: 1px solid rgba(255,255,255,.1); }
-    .big { font-size: 1.25rem; font-weight: 800; }
+    .sub { color: var(--muted); max-width: 66ch; margin: 12px 0 18px; }
 
-    .layout {
-      display: grid; gap: 16px;
-      grid-template-columns: 1.6fr 1fr;
-      align-items: start;
-    }
+    .stat-grid { display:grid; grid-template-columns:repeat(2,1fr); gap:10px; }
+    .stat { padding:14px; border-radius:12px; background:var(--panel); border:1px solid rgba(255,255,255,.1); }
+    .big { font-size:1.25rem; font-weight:800; }
 
+    .layout { display:grid; grid-template-columns:1.6fr 1fr; gap:16px; align-items:start; }
     .section { padding: 18px; }
-    h2 { margin: 0 0 10px; font-size: 1.1rem; }
-    p { margin: 0; color: var(--muted); }
+    h2 { margin:0 0 10px; font-size:1.1rem; }
+    h3 { margin:6px 0; }
+    p { margin:0; color:var(--muted); }
 
-    .game-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin-top: 12px; }
-    .game-card { padding: 14px; border-radius: 13px; background: var(--panel); border: 1px solid rgba(255,255,255,.1); }
-    .tag { font-size: .75rem; border:1px solid rgba(107,245,205,.38); background: rgba(107,245,205,.11); color:#e0fff6; border-radius: 999px; padding: 3px 8px; display:inline-block; margin-bottom:8px; }
+    .game-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; margin-top:12px; }
+    .game-card { padding:14px; border-radius:13px; background:var(--panel); border:1px solid rgba(255,255,255,.1); }
+    .thumb { width:100%; height:128px; object-fit:cover; border-radius:10px; border:1px solid rgba(255,255,255,.14); margin-bottom:8px; }
+    .tag { font-size:.75rem; border:1px solid rgba(107,245,205,.38); background:rgba(107,245,205,.11); color:#e0fff6; border-radius:999px; padding:3px 8px; display:inline-block; margin-bottom:8px; }
     .row { display:flex; justify-content:space-between; align-items:center; gap:8px; }
-    .player-count { color: var(--ok); font-weight: 700; }
-    .muted { color: var(--muted); font-size: .9rem; }
+    .player-count { color:var(--ok); font-weight:700; }
+    .muted { color:var(--muted); font-size:.9rem; }
 
-    .social-list, .feed-list, .message-list {
-      margin-top: 12px; display: grid; gap: 10px;
-    }
-    .item { background: var(--panel); border:1px solid rgba(255,255,255,.09); border-radius: 12px; padding: 12px; }
-    .avatar {
-      width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
-      border: 1px solid rgba(255,255,255,.22);
-      background: #121b32;
-    }
+    .item, .asset-card { background:var(--panel); border:1px solid rgba(255,255,255,.09); border-radius:12px; padding:12px; }
+    .feed-list, .social-list, .message-list, .asset-list, .user-admin-list { display:grid; gap:10px; margin-top:12px; }
+
+    .avatar { width:38px; height:38px; border-radius:50%; object-fit:cover; border:1px solid rgba(255,255,255,.22); background:#121b32; }
     .inline { display:flex; gap:10px; align-items:center; }
 
     input, textarea, select {
-      width: 100%; margin-top: 8px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(6,10,22,.7);
-      border-radius: 10px;
-      color: var(--text);
-      padding: 10px;
-      font-family: inherit;
+      width:100%; margin-top:8px; border:1px solid rgba(255,255,255,.16);
+      background:rgba(6,10,22,.7); border-radius:10px; color:var(--text); padding:10px; font-family:inherit;
     }
-    textarea { min-height: 84px; resize: vertical; }
+    textarea { min-height:84px; resize:vertical; }
 
-    .two { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
-    .download-grid { display:grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap:10px; margin-top:12px; }
+    .two { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .download-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; margin-top:12px; }
 
-    .modal {
-      position: fixed; inset: 0; display: none; place-items: center;
-      background: rgba(2,5,12,0.65); z-index: 70;
-    }
-    .modal.active { display: grid; }
-    .modal-box { width: min(560px, 92vw); padding: 18px; }
-    .tabs { display:flex; gap:8px; margin-bottom:8px; }
-    .tabs button.active { border-color: rgba(175,210,255,.55); background: linear-gradient(145deg, rgba(110,141,255,.45), rgba(69,216,255,.3)); }
+    .status-pending { color: var(--warn); }
+    .status-approved { color: var(--ok); }
+    .status-denied { color: var(--bad); }
 
-    footer { text-align:center; margin-top: 20px; color:#8192bd; }
+    .tabs { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+    .tab-btn.active { border-color: rgba(175,210,255,.55); background: linear-gradient(145deg, rgba(110,141,255,.45), rgba(69,216,255,.3)); }
+    .tab-panel { display:none; }
+    .tab-panel.active { display:block; }
+
+    .modal { position:fixed; inset:0; display:none; place-items:center; background:rgba(2,5,12,.65); z-index:70; }
+    .modal.active { display:grid; }
+    .modal-box { width:min(560px,92vw); padding:18px; }
+
+    footer { text-align:center; margin-top:20px; color:#8192bd; }
 
     @media (max-width: 980px) {
-      .hero, .layout { grid-template-columns: 1fr; }
-      .game-grid, .download-grid, .two { grid-template-columns: 1fr; }
+      .hero, .layout { grid-template-columns:1fr; }
+      .game-grid, .download-grid, .two { grid-template-columns:1fr; }
       nav { position: static; }
     }
   </style>
@@ -160,26 +151,26 @@
     <section class="hero glass">
       <div>
         <h1>Build Worlds. <span class="hl">Own the Universe.</span> Play Together.</h1>
-        <p class="sub">VantaCore is a Roblox-like platform with real account flows, social features, creator tools, profile pictures, live-updating player counts, downloadable clients, and one dark glossy interface.</p>
+        <p class="sub">VantaCore now includes accounts, social systems, profile pictures, live player counts, asset moderation workflows, moderator tools, and owner controls — all in a glossy dark Roblox-like experience.</p>
         <div class="nav-row">
           <a class="btn primary" href="#games">Start Playing</a>
-          <a class="btn" href="#downloads">Download Player Client</a>
-          <a class="btn" href="#downloads">Download Creator Client</a>
+          <a class="btn" href="#assets">Upload Assets</a>
+          <a class="btn" href="#downloads">Download Clients</a>
         </div>
       </div>
       <div class="stat-grid">
-        <div class="stat"><div class="big" id="liveTotalPlayers">0</div><p>Live players online now</p></div>
+        <div class="stat"><div class="big" id="liveTotalPlayers">0</div><p>Live players online</p></div>
         <div class="stat"><div class="big" id="liveTotalGames">0</div><p>Active worlds</p></div>
         <div class="stat"><div class="big" id="liveCreators">0</div><p>Creators publishing</p></div>
-        <div class="stat"><div class="big">Dark Gloss</div><p>Single premium visual system</p></div>
+        <div class="stat"><div class="big" id="pendingAssets">0</div><p>Assets pending moderation</p></div>
       </div>
     </section>
 
     <div class="layout">
       <main>
         <section id="games" class="section glass">
-          <h2>Discover Worlds (Live Player Counts)</h2>
-          <p>Counts refresh continuously to mirror active sessions across the platform.</p>
+          <h2>Discover Worlds (Live Player Counts + Thumbnails)</h2>
+          <p>Every game includes a thumbnail and real-time style count updates.</p>
           <div class="game-grid" id="gameGrid"></div>
         </section>
 
@@ -191,26 +182,51 @@
           <div class="feed-list" id="feedList"></div>
         </section>
 
+        <section id="assets" class="section glass" style="margin-top:16px;">
+          <h2>Asset Uploads (Images, Thumbnails, Audios, Avatar Items)</h2>
+          <p>All uploaded assets are <strong>miserable/moderated</strong>: they must be approved by moderators before use.</p>
+          <div class="two">
+            <div>
+              <select id="assetType">
+                <option value="thumbnail">Thumbnail</option>
+                <option value="image">Image</option>
+                <option value="audio">Audio</option>
+                <option value="avatar-item">Avatar Item</option>
+              </select>
+              <input id="assetName" placeholder="Asset name" />
+              <input id="assetUrl" placeholder="Asset URL (image/audio/file)" />
+              <button id="uploadAssetBtn" style="margin-top:8px;">Upload Asset</button>
+            </div>
+            <div>
+              <div class="item">
+                <strong>Moderation Policy</strong>
+                <p class="muted">Pending assets are hidden from production usage until approved. Denied assets remain blocked.</p>
+              </div>
+            </div>
+          </div>
+          <div class="asset-list" id="assetList"></div>
+        </section>
+
         <section id="downloads" class="section glass" style="margin-top:16px;">
           <h2>Download Clients</h2>
-          <p>Use website discovery, then launch through native player/creator apps like Roblox.</p>
+          <p>Use website discovery, then launch through native player/creator apps.</p>
           <div class="download-grid">
             <div class="item">
               <span class="tag">PC Player Client</span>
               <h3>VantaPlayerSetup.exe</h3>
-              <p>Dedicated game launcher/runtime for Windows.</p>
+              <p>Dedicated game runtime for Windows.</p>
               <a class="btn primary" href="downloads/VantaPlayerSetup.exe" download>Download .exe</a>
             </div>
             <div class="item">
               <span class="tag">Creator Client</span>
               <h3>VantaCreatorStudio.exe</h3>
-              <p>Windows-only game creation and publishing suite.</p>
+              <p>Windows-only creation and publishing suite.</p>
               <a class="btn primary" href="downloads/VantaCreatorStudio.exe" download>Download .exe</a>
             </div>
             <div class="item">
               <span class="tag">Mobile Player</span>
               <h3>VantaPlayerMobile</h3>
-              <p>iOS/Android package metadata and distribution info.</p>
+              <p>iOS/Android metadata and distribution info.</p>
               <a class="btn" href="downloads/VantaPlayerMobile.txt" download>Get Mobile Info</a>
             </div>
           </div>
@@ -221,7 +237,13 @@
         <section class="section glass">
           <h2>Profile</h2>
           <div id="profilePanel" class="item">
-            <p>Sign in to set your avatar, bio, and social profile.</p>
+            <p>Sign in to manage profile details and security.</p>
+          </div>
+          <div id="passwordPanel" class="item" style="margin-top:10px; display:none;">
+            <strong>Change Password</strong>
+            <input id="pwCurrent" type="password" placeholder="Current password" />
+            <input id="pwNew" type="password" placeholder="New password" />
+            <button id="changePwBtn" style="margin-top:8px;">Update Password</button>
           </div>
         </section>
 
@@ -242,14 +264,48 @@
       </aside>
     </div>
 
-    <footer>VantaCore • The ultimate social sandbox for creators and players.</footer>
+    <section class="section glass" style="margin-top:16px;" id="staffSection">
+      <h2>Staff Center</h2>
+      <div class="tabs">
+        <button class="tab-btn" data-tab="modTab" id="openModTab" style="display:none;">Moderation Tab</button>
+        <button class="tab-btn" data-tab="ownerTab" id="openOwnerTab" style="display:none;">Owner Tab (dan44ous)</button>
+      </div>
+
+      <div id="modTab" class="tab-panel">
+        <p>Moderators can approve or deny all pending assets.</p>
+        <div class="asset-list" id="modQueue"></div>
+      </div>
+
+      <div id="ownerTab" class="tab-panel">
+        <p>Owner controls for <strong>dan44ous</strong>: grant/revoke moderator rights and platform-wide actions.</p>
+        <div class="two">
+          <div class="item">
+            <strong>Grant / Revoke Moderator</strong>
+            <input id="modUserName" placeholder="Username" />
+            <div class="nav-row" style="margin-top:8px;">
+              <button id="grantModBtn" class="btn warn">Grant Moderator</button>
+              <button id="revokeModBtn" class="btn bad">Revoke Moderator</button>
+            </div>
+          </div>
+          <div class="item">
+            <strong>Owner Global Controls</strong>
+            <p class="muted">Use with caution.</p>
+            <button id="approveAllBtn" class="btn warn" style="margin-top:8px;">Approve All Pending Assets</button>
+            <button id="clearDeniedBtn" class="btn bad" style="margin-top:8px;">Delete Denied Assets</button>
+          </div>
+        </div>
+        <div class="user-admin-list" id="userAdminList"></div>
+      </div>
+    </section>
+
+    <footer>VantaCore • The ultimate social sandbox for creators, moderators, and owners.</footer>
   </div>
 
   <div id="authModal" class="modal">
     <div class="modal-box glass">
       <div class="tabs">
-        <button id="tabLogin" class="active">Login</button>
-        <button id="tabRegister">Create Account</button>
+        <button id="tabLogin" class="tab-btn active">Login</button>
+        <button id="tabRegister" class="tab-btn">Create Account</button>
       </div>
 
       <div id="loginPanel">
@@ -278,61 +334,85 @@
       users: 'vc_users',
       current: 'vc_current_user',
       feed: 'vc_feed',
-      dms: 'vc_dms'
+      dms: 'vc_dms',
+      assets: 'vc_assets'
     };
 
+    const OWNER = 'dan44ous';
     const defaultAvatar = 'https://api.dicebear.com/9.x/identicon/svg?seed=VantaCore';
 
     const games = [
-      { id: 1, name: 'Neon City Tycoon', genre: 'Tycoon', players: 124540, likes: 94 },
-      { id: 2, name: 'SkyRaid Battlegrounds', genre: 'Action', players: 91220, likes: 91 },
-      { id: 3, name: 'Dungeon Forge RPG', genre: 'RPG', players: 78215, likes: 96 },
-      { id: 4, name: 'Velocity Obby Rush', genre: 'Obby', players: 66430, likes: 89 }
+      { id: 1, name: 'Neon City Tycoon', genre: 'Tycoon', players: 124540, likes: 94, thumbnail: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=900&q=80' },
+      { id: 2, name: 'SkyRaid Battlegrounds', genre: 'Action', players: 91220, likes: 91, thumbnail: 'https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=900&q=80' },
+      { id: 3, name: 'Dungeon Forge RPG', genre: 'RPG', players: 78215, likes: 96, thumbnail: 'https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=80' },
+      { id: 4, name: 'Velocity Obby Rush', genre: 'Obby', players: 66430, likes: 89, thumbnail: 'https://images.unsplash.com/photo-1481487196290-c152efe083f5?auto=format&fit=crop&w=900&q=80' }
     ];
 
     const seedFeed = [
       { user: 'VantaDev', text: 'Creator analytics update just dropped!', time: 'Just now' },
-      { user: 'SkyBuilder', text: 'My new map got featured today 🚀', time: '5m ago' }
+      { user: OWNER, text: 'Owner notice: all assets require moderation approval.', time: '1m ago' }
     ];
 
     const $ = (id) => document.getElementById(id);
-
-    function getJson(key, fallback) {
-      try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
-    }
-
-    function setJson(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
+    const getJson = (key, fallback) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; } };
+    const setJson = (key, value) => localStorage.setItem(key, JSON.stringify(value));
 
     function bootData() {
       if (!localStorage.getItem(STORE.feed)) setJson(STORE.feed, seedFeed);
       if (!localStorage.getItem(STORE.users)) {
-        setJson(STORE.users, [{
-          username: 'VantaDev',
-          password: 'demo',
-          avatar: defaultAvatar,
-          bio: 'Platform staff account',
-          friends: ['SkyBuilder'],
-          followers: 1123,
-          following: 86,
-          createdAt: new Date().toISOString()
-        }, {
-          username: 'SkyBuilder',
-          password: 'demo',
-          avatar: 'https://api.dicebear.com/9.x/identicon/svg?seed=SkyBuilder',
-          bio: 'Builder of floating islands.',
-          friends: ['VantaDev'],
-          followers: 489,
-          following: 52,
-          createdAt: new Date().toISOString()
-        }]);
+        setJson(STORE.users, [
+          {
+            username: OWNER,
+            password: '0000',
+            avatar: `https://api.dicebear.com/9.x/identicon/svg?seed=${OWNER}`,
+            bio: 'Platform owner account.',
+            friends: ['VantaDev'],
+            followers: 10000,
+            following: 2,
+            role: 'owner',
+            createdAt: new Date().toISOString()
+          },
+          {
+            username: 'VantaDev',
+            password: 'demo',
+            avatar: 'https://api.dicebear.com/9.x/identicon/svg?seed=VantaDev',
+            bio: 'Platform staff account',
+            friends: [OWNER],
+            followers: 1123,
+            following: 86,
+            role: 'moderator',
+            createdAt: new Date().toISOString()
+          },
+          {
+            username: 'SkyBuilder',
+            password: 'demo',
+            avatar: 'https://api.dicebear.com/9.x/identicon/svg?seed=SkyBuilder',
+            bio: 'Builder of floating islands.',
+            friends: ['VantaDev'],
+            followers: 489,
+            following: 52,
+            role: 'user',
+            createdAt: new Date().toISOString()
+          }
+        ]);
       }
       if (!localStorage.getItem(STORE.dms)) setJson(STORE.dms, []);
+      if (!localStorage.getItem(STORE.assets)) {
+        setJson(STORE.assets, [
+          { id: crypto.randomUUID(), name: 'Starter Hero Banner', type: 'image', url: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1000&q=80', owner: 'VantaDev', status: 'approved', createdAt: new Date().toISOString() },
+          { id: crypto.randomUUID(), name: 'Cyber Sprint OST', type: 'audio', url: 'https://example.com/audio/cyber-sprint.mp3', owner: 'SkyBuilder', status: 'pending', createdAt: new Date().toISOString() }
+        ]);
+      }
     }
 
-    function currentUser() { return localStorage.getItem(STORE.current); }
-
-    function getUser(name) {
-      return getJson(STORE.users, []).find(u => u.username === name);
+    function currentUserName() { return localStorage.getItem(STORE.current); }
+    function users() { return getJson(STORE.users, []); }
+    function assets() { return getJson(STORE.assets, []); }
+    function userByName(name) { return users().find(u => u.username === name); }
+    function isOwner(name = currentUserName()) { return userByName(name)?.role === 'owner'; }
+    function isModerator(name = currentUserName()) {
+      const role = userByName(name)?.role;
+      return role === 'moderator' || role === 'owner';
     }
 
     function renderTopStats() {
@@ -340,6 +420,7 @@
       $('liveTotalPlayers').textContent = totalPlayers.toLocaleString();
       $('liveTotalGames').textContent = games.length.toLocaleString();
       $('liveCreators').textContent = Math.max(1200, Math.floor(totalPlayers / 115)).toLocaleString();
+      $('pendingAssets').textContent = assets().filter(a => a.status === 'pending').length.toString();
     }
 
     function renderGames() {
@@ -349,6 +430,7 @@
         const card = document.createElement('article');
         card.className = 'game-card';
         card.innerHTML = `
+          <img class="thumb" src="${g.thumbnail}" alt="${g.name} thumbnail" />
           <span class="tag">${g.genre}</span>
           <div class="row"><strong>${g.name}</strong><span class="player-count">${g.players.toLocaleString()} playing</span></div>
           <p class="muted">${g.likes}% positive ratings • Live servers online</p>
@@ -372,20 +454,21 @@
     }
 
     function renderProfile() {
-      const name = currentUser();
+      const name = currentUserName();
       const panel = $('profilePanel');
       const welcome = $('welcome');
       $('logoutBtn').style.display = name ? 'inline-block' : 'none';
       $('openAuth').style.display = name ? 'none' : 'inline-block';
+      $('passwordPanel').style.display = name ? 'block' : 'none';
 
       if (!name) {
         welcome.textContent = 'Guest Mode';
-        panel.innerHTML = '<p>Sign in to set your avatar, bio, and social profile.</p>';
+        panel.innerHTML = '<p>Sign in to manage profile details and security.</p>';
         return;
       }
 
-      const user = getUser(name);
-      if (!user) return;
+      const user = userByName(name);
+      const roleBadge = user.role === 'owner' ? 'Owner' : user.role === 'moderator' ? 'Moderator' : 'User';
       welcome.textContent = `Signed in as @${name}`;
       panel.innerHTML = `
         <div class="inline">
@@ -398,13 +481,13 @@
         <div class="row" style="margin-top:10px;">
           <span>${user.friends.length} friends</span>
           <span>${user.followers || 0} followers</span>
-          <span>${user.following || 0} following</span>
+          <span>${roleBadge}</span>
         </div>
       `;
     }
 
     function renderFriends() {
-      const me = currentUser();
+      const me = currentUserName();
       const list = $('friendList');
       const target = $('dmTarget');
       list.innerHTML = '';
@@ -414,12 +497,12 @@
         return;
       }
 
-      const user = getUser(me);
+      const user = userByName(me);
       if (!user || user.friends.length === 0) {
         list.innerHTML = '<div class="item"><p>No friends yet. Add someone by username.</p></div>';
       } else {
         user.friends.forEach(friend => {
-          const u = getUser(friend);
+          const u = userByName(friend);
           const el = document.createElement('div');
           el.className = 'item';
           el.innerHTML = `<div class="inline"><img class="avatar" src="${(u && u.avatar) || defaultAvatar}" alt="avatar"><div><strong>@${friend}</strong><p class="muted">Online</p></div></div>`;
@@ -434,14 +517,14 @@
     }
 
     function renderDms() {
-      const me = currentUser();
+      const me = currentUserName();
       const box = $('messageList');
       box.innerHTML = '';
       if (!me) {
         box.innerHTML = '<div class="item"><p>Login to send messages.</p></div>';
         return;
       }
-      const dms = getJson(STORE.dms, []).filter(m => m.from === me || m.to === me).slice(-6).reverse();
+      const dms = getJson(STORE.dms, []).filter(m => m.from === me || m.to === me).slice(-8).reverse();
       if (!dms.length) {
         box.innerHTML = '<div class="item"><p>No messages yet.</p></div>';
         return;
@@ -454,70 +537,182 @@
       });
     }
 
-    function openModal(on=true) { $('authModal').classList.toggle('active', on); $('authStatus').textContent = ''; }
-
-    function setAuthTab(type) {
-      const login = type === 'login';
-      $('loginPanel').style.display = login ? 'block' : 'none';
-      $('registerPanel').style.display = login ? 'none' : 'block';
-      $('tabLogin').classList.toggle('active', login);
-      $('tabRegister').classList.toggle('active', !login);
+    function statusClass(status) {
+      return status === 'approved' ? 'status-approved' : status === 'denied' ? 'status-denied' : 'status-pending';
     }
 
-    function login() {
-      const username = $('loginUser').value.trim();
-      const password = $('loginPass').value;
-      const user = getUser(username);
-      if (!user || user.password !== password) {
-        $('authStatus').textContent = 'Invalid username or password.';
+    function renderAssets() {
+      const me = currentUserName();
+      const list = $('assetList');
+      list.innerHTML = '';
+      const all = assets().slice().reverse();
+      if (!all.length) {
+        list.innerHTML = '<div class="item"><p>No assets yet.</p></div>';
         return;
       }
-      localStorage.setItem(STORE.current, username);
-      openModal(false);
+
+      all.forEach(a => {
+        const canSee = a.status === 'approved' || isModerator(me) || a.owner === me;
+        if (!canSee) return;
+        const el = document.createElement('div');
+        el.className = 'asset-card';
+        el.innerHTML = `
+          <div class="row"><strong>${a.name}</strong><span class="${statusClass(a.status)}">${a.status.toUpperCase()}</span></div>
+          <p class="muted">Type: ${a.type} • Owner: ${a.owner}</p>
+          <p class="muted">URL: ${a.url}</p>
+        `;
+        list.appendChild(el);
+      });
+    }
+
+    function renderStaffTabs() {
+      const me = currentUserName();
+      const modBtn = $('openModTab');
+      const ownerBtn = $('openOwnerTab');
+      modBtn.style.display = isModerator(me) ? 'inline-block' : 'none';
+      ownerBtn.style.display = isOwner(me) ? 'inline-block' : 'none';
+
+      if (isOwner(me)) {
+        activateTab('ownerTab', ownerBtn);
+      } else if (isModerator(me)) {
+        activateTab('modTab', modBtn);
+      } else {
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      }
+    }
+
+    function activateTab(tabId, btnEl) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      const tab = document.getElementById(tabId);
+      if (tab) tab.classList.add('active');
+      if (btnEl) btnEl.classList.add('active');
+    }
+
+    function renderModQueue() {
+      const me = currentUserName();
+      const queue = $('modQueue');
+      queue.innerHTML = '';
+      if (!isModerator(me)) {
+        queue.innerHTML = '<div class="item"><p>Moderator permission required.</p></div>';
+        return;
+      }
+      const pending = assets().filter(a => a.status === 'pending').reverse();
+      if (!pending.length) {
+        queue.innerHTML = '<div class="item"><p>No pending assets.</p></div>';
+        return;
+      }
+
+      pending.forEach(a => {
+        const el = document.createElement('div');
+        el.className = 'asset-card';
+        el.innerHTML = `
+          <div class="row"><strong>${a.name}</strong><span class="status-pending">PENDING</span></div>
+          <p class="muted">Type: ${a.type} • Uploaded by: ${a.owner}</p>
+          <p class="muted">URL: ${a.url}</p>
+          <div class="nav-row" style="margin-top:8px;">
+            <button class="btn primary" data-approve="${a.id}">Approve</button>
+            <button class="btn bad" data-deny="${a.id}">Deny</button>
+          </div>
+        `;
+        queue.appendChild(el);
+      });
+
+      queue.querySelectorAll('[data-approve]').forEach(btn => btn.onclick = () => moderateAsset(btn.dataset.approve, 'approved'));
+      queue.querySelectorAll('[data-deny]').forEach(btn => btn.onclick = () => moderateAsset(btn.dataset.deny, 'denied'));
+    }
+
+    function renderOwnerAdmin() {
+      const me = currentUserName();
+      const box = $('userAdminList');
+      box.innerHTML = '';
+      if (!isOwner(me)) {
+        box.innerHTML = '<div class="item"><p>Owner permission required.</p></div>';
+        return;
+      }
+      users().forEach(u => {
+        const role = u.role === 'owner' ? 'Owner' : u.role === 'moderator' ? 'Moderator' : 'User';
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = `<div class="row"><strong>@${u.username}</strong><span>${role}</span></div><p class="muted">Friends: ${u.friends.length} • Followers: ${u.followers || 0}</p>`;
+        box.appendChild(el);
+      });
+    }
+
+    function moderateAsset(assetId, nextStatus) {
+      if (!isModerator()) return alert('Moderator permission required.');
+      const all = assets();
+      const target = all.find(a => a.id === assetId);
+      if (!target) return;
+      target.status = nextStatus;
+      setJson(STORE.assets, all);
       renderAll();
     }
 
-    function register() {
-      const username = $('regUser').value.trim();
-      const password = $('regPass').value;
-      const avatar = $('regAvatar').value.trim() || `https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(username || 'user')}`;
-      const bio = $('regBio').value.trim();
-      if (!username || !password) {
-        $('authStatus').textContent = 'Username and password are required.';
-        return;
-      }
-      const users = getJson(STORE.users, []);
-      if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
-        $('authStatus').textContent = 'Username already exists.';
-        return;
-      }
-      users.push({ username, password, avatar, bio, friends: [], followers: 0, following: 0, createdAt: new Date().toISOString() });
-      setJson(STORE.users, users);
-      localStorage.setItem(STORE.current, username);
-      openModal(false);
+    function grantRole(username, role) {
+      if (!isOwner()) return alert('Only owner can change roles.');
+      if (!username) return alert('Enter username.');
+      const allUsers = users();
+      const target = allUsers.find(u => u.username === username);
+      if (!target) return alert('User not found.');
+      if (target.username === OWNER && role !== 'owner') return alert('Owner role cannot be removed from dan44ous.');
+      target.role = role;
+      setJson(STORE.users, allUsers);
       renderAll();
+    }
+
+    function uploadAsset() {
+      const me = currentUserName();
+      if (!me) return alert('Login required to upload assets.');
+      const type = $('assetType').value;
+      const name = $('assetName').value.trim();
+      const url = $('assetUrl').value.trim();
+      if (!name || !url) return alert('Asset name and URL are required.');
+      const all = assets();
+      all.push({ id: crypto.randomUUID(), type, name, url, owner: me, status: 'pending', createdAt: new Date().toISOString() });
+      setJson(STORE.assets, all);
+      $('assetName').value = '';
+      $('assetUrl').value = '';
+      renderAll();
+    }
+
+    function changePassword() {
+      const me = currentUserName();
+      if (!me) return alert('Login required.');
+      const current = $('pwCurrent').value;
+      const next = $('pwNew').value;
+      if (!current || !next) return alert('Fill both password fields.');
+      const allUsers = users();
+      const target = allUsers.find(u => u.username === me);
+      if (target.password !== current) return alert('Current password is incorrect.');
+      target.password = next;
+      setJson(STORE.users, allUsers);
+      $('pwCurrent').value = '';
+      $('pwNew').value = '';
+      alert('Password changed successfully.');
     }
 
     function addFriend() {
-      const me = currentUser();
+      const me = currentUserName();
       const friend = $('friendName').value.trim();
       if (!me) return alert('Login required.');
       if (!friend || friend === me) return alert('Enter a valid username.');
-      const users = getJson(STORE.users, []);
-      const meUser = users.find(u => u.username === me);
-      const friendUser = users.find(u => u.username === friend);
+      const allUsers = users();
+      const meUser = allUsers.find(u => u.username === me);
+      const friendUser = allUsers.find(u => u.username === friend);
       if (!friendUser) return alert('User not found.');
       if (!meUser.friends.includes(friend)) meUser.friends.push(friend);
       if (!friendUser.friends.includes(me)) friendUser.friends.push(me);
       meUser.following = (meUser.following || 0) + 1;
       friendUser.followers = (friendUser.followers || 0) + 1;
-      setJson(STORE.users, users);
+      setJson(STORE.users, allUsers);
       $('friendName').value = '';
       renderAll();
     }
 
     function postUpdate() {
-      const me = currentUser();
+      const me = currentUserName();
       const text = $('postText').value.trim();
       if (!me) return alert('Login required to post.');
       if (!text) return;
@@ -529,7 +724,7 @@
     }
 
     function sendDm() {
-      const me = currentUser();
+      const me = currentUserName();
       const to = $('dmTarget').value;
       const text = $('dmText').value.trim();
       if (!me) return alert('Login required.');
@@ -550,12 +745,60 @@
       renderGames();
     }
 
+    function openModal(on=true) { $('authModal').classList.toggle('active', on); $('authStatus').textContent = ''; }
+
+    function setAuthTab(type) {
+      const login = type === 'login';
+      $('loginPanel').style.display = login ? 'block' : 'none';
+      $('registerPanel').style.display = login ? 'none' : 'block';
+      $('tabLogin').classList.toggle('active', login);
+      $('tabRegister').classList.toggle('active', !login);
+    }
+
+    function login() {
+      const username = $('loginUser').value.trim();
+      const password = $('loginPass').value;
+      const user = userByName(username);
+      if (!user || user.password !== password) {
+        $('authStatus').textContent = 'Invalid username or password.';
+        return;
+      }
+      localStorage.setItem(STORE.current, username);
+      openModal(false);
+      renderAll();
+    }
+
+    function register() {
+      const username = $('regUser').value.trim();
+      const password = $('regPass').value;
+      const avatar = $('regAvatar').value.trim() || `https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(username || 'user')}`;
+      const bio = $('regBio').value.trim();
+      if (!username || !password) {
+        $('authStatus').textContent = 'Username and password are required.';
+        return;
+      }
+      if (users().some(u => u.username.toLowerCase() === username.toLowerCase())) {
+        $('authStatus').textContent = 'Username already exists.';
+        return;
+      }
+      const allUsers = users();
+      allUsers.push({ username, password, avatar, bio, friends: [], followers: 0, following: 0, role: 'user', createdAt: new Date().toISOString() });
+      setJson(STORE.users, allUsers);
+      localStorage.setItem(STORE.current, username);
+      openModal(false);
+      renderAll();
+    }
+
     function renderAll() {
       renderGames();
       renderFeed();
       renderProfile();
       renderFriends();
       renderDms();
+      renderAssets();
+      renderStaffTabs();
+      renderModQueue();
+      renderOwnerAdmin();
     }
 
     bootData();
@@ -572,6 +815,28 @@
     $('postBtn').onclick = postUpdate;
     $('addFriendBtn').onclick = addFriend;
     $('sendDmBtn').onclick = sendDm;
+    $('uploadAssetBtn').onclick = uploadAsset;
+    $('changePwBtn').onclick = changePassword;
+
+    $('openModTab').onclick = () => activateTab('modTab', $('openModTab'));
+    $('openOwnerTab').onclick = () => activateTab('ownerTab', $('openOwnerTab'));
+
+    $('grantModBtn').onclick = () => grantRole($('modUserName').value.trim(), 'moderator');
+    $('revokeModBtn').onclick = () => grantRole($('modUserName').value.trim(), 'user');
+
+    $('approveAllBtn').onclick = () => {
+      if (!isOwner()) return alert('Owner only.');
+      const all = assets();
+      all.forEach(a => { if (a.status === 'pending') a.status = 'approved'; });
+      setJson(STORE.assets, all);
+      renderAll();
+    };
+
+    $('clearDeniedBtn').onclick = () => {
+      if (!isOwner()) return alert('Owner only.');
+      setJson(STORE.assets, assets().filter(a => a.status !== 'denied'));
+      renderAll();
+    };
   </script>
 </body>
 </html>
