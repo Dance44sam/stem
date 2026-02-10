@@ -1,0 +1,10 @@
+{
+  "name": "blockforge-pc",
+  "version": "1.0.0",
+  "description": "Desktop-focused clone platform with client and creator inspired by Roblox",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check server.js"
+  }
+}

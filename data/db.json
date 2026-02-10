@@ -1,0 +1,130 @@
+{
+  "users": [
+    {
+      "id": "u-admin",
+      "username": "BuilderPro",
+      "bio": "I build competitive obbies and social hubs.",
+      "balance": 2500,
+      "xp": 1200,
+      "friends": [
+        "u-artist"
+      ],
+      "inventory": [
+        "item-neon-trail"
+      ],
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "u-artist",
+      "username": "PixelArtist",
+      "bio": "UI/UX creator + avatar stylist.",
+      "balance": 1400,
+      "xp": 680,
+      "friends": [
+        "u-admin"
+      ],
+      "inventory": [
+        "item-gold-aura"
+      ],
+      "createdAt": "2026-01-03T00:00:00.000Z"
+    },
+    {
+      "id": "u-1770731649253-661",
+      "username": "TestPilot",
+      "bio": "New player in BlockForge X",
+      "balance": 1075,
+      "xp": 35,
+      "friends": [],
+      "inventory": [],
+      "createdAt": "2026-02-10T13:54:09.253Z"
+    },
+    {
+      "id": "u-1770731667916-64",
+      "username": "VisualTester",
+      "bio": "New player in BlockForge X",
+      "balance": 1000,
+      "xp": 0,
+      "friends": [],
+      "inventory": [],
+      "createdAt": "2026-02-10T13:54:27.916Z"
+    }
+  ],
+  "worlds": [
+    {
+      "id": "world-1770731658633-829",
+      "ownerId": "u-1770731649253-661",
+      "title": "Galactic Plaza",
+      "genre": "Social",
+      "description": "Meet and trade",
+      "tags": [
+        "social",
+        "hangout"
+      ],
+      "activePlayers": 0,
+      "likes": 0,
+      "visits": 0,
+      "thumbnail": "🧩",
+      "updatedAt": "2026-02-10T13:54:18.633Z"
+    },
+    {
+      "id": "world-neon-city",
+      "ownerId": "u-admin",
+      "title": "Neon City Rush",
+      "genre": "Obby",
+      "description": "A glossy cyber city with moving platforms.",
+      "tags": [
+        "featured",
+        "parkour"
+      ],
+      "activePlayers": 19,
+      "likes": 220,
+      "visits": 3400,
+      "thumbnail": "🌃",
+      "updatedAt": "2026-02-09T15:00:00.000Z"
+    }
+  ],
+  "posts": [
+    {
+      "id": "post-1",
+      "userId": "u-artist",
+      "text": "Dropped a new avatar aura in marketplace ✨",
+      "likes": 12,
+      "createdAt": "2026-02-09T13:20:00.000Z"
+    }
+  ],
+  "friendRequests": [],
+  "marketplace": [
+    {
+      "id": "item-neon-trail",
+      "name": "Neon Trail",
+      "price": 350,
+      "rarity": "Epic",
+      "sellerId": "u-artist"
+    },
+    {
+      "id": "item-gold-aura",
+      "name": "Gold Aura",
+      "price": 600,
+      "rarity": "Legendary",
+      "sellerId": "u-admin"
+    }
+  ],
+  "transactions": [
+    {
+      "id": "tx-1770731658633-246",
+      "type": "publish_reward",
+      "userId": "u-1770731649253-661",
+      "amount": 75,
+      "createdAt": "2026-02-10T13:54:18.633Z"
+    }
+  ],
+  "chat": [
+    {
+      "id": "msg-1",
+      "room": "global",
+      "userId": "u-admin",
+      "text": "Welcome to BlockForge X!",
+      "createdAt": "2026-02-09T12:00:00.000Z"
+    }
+  ]
+}

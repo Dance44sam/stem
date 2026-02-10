@@ -1,0 +1,56 @@
+:root {
+  --bg: #090b16;
+  --bg2: #131a35;
+  --text: #f5f7ff;
+  --muted: #a8b3d8;
+  --accent: linear-gradient(120deg, #4ad6ff, #8a7dff, #ff5bce);
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  color: var(--text);
+  font-family: Inter, Segoe UI, Arial, sans-serif;
+  background: radial-gradient(circle at 10% 10%, #2e1d68 0, transparent 35%), radial-gradient(circle at 90% 20%, #154b7f 0, transparent 40%), var(--bg);
+  min-height: 100vh;
+}
+.bg-glow { position: fixed; inset: 0; pointer-events: none; backdrop-filter: blur(2px); }
+.topbar { margin: 1rem; padding: 1rem 1.2rem; display: flex; justify-content: space-between; gap: 1rem; align-items: center; }
+.layout { display: grid; grid-template-columns: 280px 1fr; gap: 1rem; padding: 0 1rem 1rem; }
+.panel-stack { display: grid; gap: 1rem; }
+.panel { padding: 1rem; border-radius: 18px; }
+.glass {
+  background: linear-gradient(135deg, rgba(255,255,255,.16), rgba(255,255,255,.06));
+  border: 1px solid rgba(255,255,255,.22);
+  box-shadow: 0 20px 35px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.15);
+  backdrop-filter: blur(14px);
+}
+h1,h2,h3,h4,p { margin: .35rem 0; }
+.muted { color: var(--muted); }
+.row { display: flex; gap: .55rem; align-items: center; }
+input, textarea, button {
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,.22);
+  background: rgba(14,18,38,.6);
+  color: var(--text);
+  padding: .58rem .72rem;
+}
+input, textarea { width: 100%; margin-bottom: .55rem; }
+button {
+  cursor: pointer;
+  background-image: var(--accent);
+  border: none;
+  color: #060813;
+  font-weight: 700;
+}
+button.secondary { background: rgba(124,140,195,.5); color: #fff; border: 1px solid rgba(255,255,255,.25); }
+.world-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(200px,1fr)); gap: .75rem; }
+.card { padding: .75rem; border-radius: 14px; background: rgba(11,17,36,.68); border: 1px solid rgba(143,177,255,.2); }
+.card.slim p { margin: .25rem 0; }
+.emoji { font-size: 1.5rem; }
+.chips span { display: inline-block; margin: .2rem .28rem .1rem 0; padding: .2rem .5rem; border-radius: 999px; background: rgba(126,180,255,.22); font-size: .8rem; }
+.two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.scroll { max-height: 230px; overflow: auto; display: grid; gap: .5rem; }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: 1fr; }
+  .two-col { grid-template-columns: 1fr; }
+}
