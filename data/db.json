@@ -1,0 +1,95 @@
+{
+  "users": [
+    {
+      "id": "u-admin",
+      "username": "BuilderPro",
+      "bio": "I build competitive obbies and social hubs.",
+      "balance": 2500,
+      "xp": 1200,
+      "friends": [
+        "u-artist"
+      ],
+      "inventory": [
+        "item-neon-trail"
+      ],
+      "createdAt": "2026-01-01T00:00:00.000Z"
+    },
+    {
+      "id": "u-artist",
+      "username": "PixelArtist",
+      "bio": "UI/UX creator + avatar stylist.",
+      "balance": 1400,
+      "xp": 680,
+      "friends": [
+        "u-admin"
+      ],
+      "inventory": [
+        "item-gold-aura"
+      ],
+      "createdAt": "2026-01-03T00:00:00.000Z"
+    }
+  ],
+  "worlds": [
+    {
+      "id": "world-neon-city",
+      "ownerId": "u-admin",
+      "title": "Neon City Rush",
+      "genre": "Obby",
+      "description": "A glossy cyber city with moving platforms.",
+      "tags": [
+        "featured",
+        "parkour"
+      ],
+      "activePlayers": 19,
+      "likes": 220,
+      "visits": 3400,
+      "thumbnail": "🌃",
+      "updatedAt": "2026-02-09T15:00:00.000Z"
+    }
+  ],
+  "posts": [
+    {
+      "id": "post-1",
+      "userId": "u-artist",
+      "text": "Dropped a new avatar aura in marketplace ✨",
+      "likes": 12,
+      "createdAt": "2026-02-09T13:20:00.000Z"
+    }
+  ],
+  "friendRequests": [],
+  "marketplace": [
+    {
+      "id": "item-neon-trail",
+      "name": "Neon Trail",
+      "price": 350,
+      "rarity": "Epic",
+      "sellerId": "u-artist"
+    },
+    {
+      "id": "item-gold-aura",
+      "name": "Gold Aura",
+      "price": 600,
+      "rarity": "Legendary",
+      "sellerId": "u-admin"
+    }
+  ],
+  "transactions": [],
+  "chat": [
+    {
+      "id": "msg-1",
+      "room": "global",
+      "userId": "u-admin",
+      "text": "Welcome to BlockForge X!",
+      "createdAt": "2026-02-09T12:00:00.000Z"
+    }
+  ],
+  "presence": [
+    {
+      "userId": "u-admin",
+      "room": "lobby",
+      "x": 10,
+      "y": 20,
+      "updatedAt": "2026-02-10T14:02:35.543Z"
+    }
+  ]
+}
