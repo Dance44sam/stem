@@ -1,96 +1,577 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Click the Button Game</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VantaCore — Play Infinite Worlds</title>
   <style>
+    :root {
+      --bg: #060913;
+      --panel: rgba(17, 23, 40, 0.78);
+      --panel-strong: rgba(17, 24, 45, 0.95);
+      --line: rgba(149, 190, 255, 0.23);
+      --text: #edf4ff;
+      --muted: #94a2c7;
+      --primary: #6e8dff;
+      --secondary: #45d8ff;
+      --ok: #6bf5cd;
+      --danger: #ff6b9f;
+      --radius: 16px;
+      --glow: 0 18px 40px rgba(110, 141, 255, 0.28);
+    }
+
+    * { box-sizing: border-box; }
     body {
-      font-family: sans-serif;
-      text-align: center;
-      margin-top: 50px;
+      margin: 0;
+      color: var(--text);
+      font-family: Inter, "Segoe UI", system-ui, sans-serif;
+      background:
+        radial-gradient(1200px 700px at 10% -15%, rgba(69, 216, 255, 0.22), transparent 55%),
+        radial-gradient(1000px 700px at 95% 0%, rgba(110, 141, 255, 0.26), transparent 56%),
+        linear-gradient(145deg, #04050a, #090f1d 40%, #080b14 100%);
+      min-height: 100vh;
     }
-    #gameArea {
-      position: relative;
-      width: 100%;
-      height: 400px;
-      border: 2px solid #333;
-      margin-top: 20px;
-      overflow: hidden;
+
+    .shell { width: min(1280px, 94vw); margin: 22px auto 48px; }
+    .glass {
+      background: linear-gradient(165deg, rgba(255,255,255,0.07), rgba(255,255,255,0.02));
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--glow), inset 0 1px 0 rgba(255,255,255,0.15);
+      backdrop-filter: blur(16px) saturate(125%);
+      -webkit-backdrop-filter: blur(16px) saturate(125%);
     }
-    #clickButton {
-      position: absolute;
-      padding: 10px 20px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
+
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 16px; margin-bottom: 18px;
+      position: sticky; top: 12px; z-index: 50;
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; }
+    .logo {
+      width: 34px; aspect-ratio: 1; border-radius: 10px;
+      background: linear-gradient(140deg, #4ad6ff, #7485ff 50%, #ae7cff);
+      box-shadow: inset 0 2px 7px rgba(255,255,255,0.35), 0 8px 20px rgba(74,120,255,0.45);
+    }
+    .nav-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+
+    button, .btn {
+      border: 1px solid rgba(255,255,255,0.16);
+      color: var(--text);
+      background: linear-gradient(145deg, rgba(255,255,255,.14), rgba(255,255,255,.04));
+      border-radius: 12px;
+      padding: 9px 12px;
+      font-weight: 600;
       cursor: pointer;
-      font-size: 16px;
+      text-decoration: none;
+      transition: .18s ease;
     }
-    #startBtn {
-      padding: 10px 20px;
-      font-size: 16px;
+    button:hover, .btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,.3); }
+    .btn.primary {
+      background: linear-gradient(145deg, rgba(110,141,255,.55), rgba(69,216,255,.38));
+      border-color: rgba(180,206,255,.45);
     }
-    #scoreDisplay {
-      font-size: 20px;
-      margin-top: 10px;
+
+    .hero {
+      display: grid; grid-template-columns: 1.1fr 1fr; gap: 16px;
+      padding: 24px; margin-bottom: 18px;
+    }
+    h1 { margin: 0; font-size: clamp(2rem, 4vw, 3.3rem); line-height: 1.05; }
+    .hl {
+      background: linear-gradient(90deg, #9cc2ff, #79f1ff 42%, #d6a7ff);
+      -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .sub { color: var(--muted); max-width: 64ch; margin: 12px 0 18px; }
+    .stat-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+    .stat { padding: 14px; border-radius: 12px; background: var(--panel); border: 1px solid rgba(255,255,255,.1); }
+    .big { font-size: 1.25rem; font-weight: 800; }
+
+    .layout {
+      display: grid; gap: 16px;
+      grid-template-columns: 1.6fr 1fr;
+      align-items: start;
+    }
+
+    .section { padding: 18px; }
+    h2 { margin: 0 0 10px; font-size: 1.1rem; }
+    p { margin: 0; color: var(--muted); }
+
+    .game-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; margin-top: 12px; }
+    .game-card { padding: 14px; border-radius: 13px; background: var(--panel); border: 1px solid rgba(255,255,255,.1); }
+    .tag { font-size: .75rem; border:1px solid rgba(107,245,205,.38); background: rgba(107,245,205,.11); color:#e0fff6; border-radius: 999px; padding: 3px 8px; display:inline-block; margin-bottom:8px; }
+    .row { display:flex; justify-content:space-between; align-items:center; gap:8px; }
+    .player-count { color: var(--ok); font-weight: 700; }
+    .muted { color: var(--muted); font-size: .9rem; }
+
+    .social-list, .feed-list, .message-list {
+      margin-top: 12px; display: grid; gap: 10px;
+    }
+    .item { background: var(--panel); border:1px solid rgba(255,255,255,.09); border-radius: 12px; padding: 12px; }
+    .avatar {
+      width: 38px; height: 38px; border-radius: 50%; object-fit: cover;
+      border: 1px solid rgba(255,255,255,.22);
+      background: #121b32;
+    }
+    .inline { display:flex; gap:10px; align-items:center; }
+
+    input, textarea, select {
+      width: 100%; margin-top: 8px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(6,10,22,.7);
+      border-radius: 10px;
+      color: var(--text);
+      padding: 10px;
+      font-family: inherit;
+    }
+    textarea { min-height: 84px; resize: vertical; }
+
+    .two { display:grid; grid-template-columns: 1fr 1fr; gap:10px; }
+    .download-grid { display:grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap:10px; margin-top:12px; }
+
+    .modal {
+      position: fixed; inset: 0; display: none; place-items: center;
+      background: rgba(2,5,12,0.65); z-index: 70;
+    }
+    .modal.active { display: grid; }
+    .modal-box { width: min(560px, 92vw); padding: 18px; }
+    .tabs { display:flex; gap:8px; margin-bottom:8px; }
+    .tabs button.active { border-color: rgba(175,210,255,.55); background: linear-gradient(145deg, rgba(110,141,255,.45), rgba(69,216,255,.3)); }
+
+    footer { text-align:center; margin-top: 20px; color:#8192bd; }
+
+    @media (max-width: 980px) {
+      .hero, .layout { grid-template-columns: 1fr; }
+      .game-grid, .download-grid, .two { grid-template-columns: 1fr; }
+      nav { position: static; }
     }
   </style>
 </head>
 <body>
+  <div class="shell">
+    <nav class="glass">
+      <div class="brand"><span class="logo"></span> VantaCore</div>
+      <div class="nav-row">
+        <span id="welcome" class="muted">Guest Mode</span>
+        <button id="openAuth" class="btn primary">Sign In / Create Account</button>
+        <button id="logoutBtn" style="display:none;">Logout</button>
+      </div>
+    </nav>
 
-<h1>Click the Button Game</h1>
-<p>Click the button as many times as you can in 10 seconds!</p>
-<button id="startBtn">Start Game</button>
-<div id="scoreDisplay">Score: 0</div>
+    <section class="hero glass">
+      <div>
+        <h1>Build Worlds. <span class="hl">Own the Universe.</span> Play Together.</h1>
+        <p class="sub">VantaCore is a Roblox-like platform with real account flows, social features, creator tools, profile pictures, live-updating player counts, downloadable clients, and one dark glossy interface.</p>
+        <div class="nav-row">
+          <a class="btn primary" href="#games">Start Playing</a>
+          <a class="btn" href="#downloads">Download Player Client</a>
+          <a class="btn" href="#downloads">Download Creator Client</a>
+        </div>
+      </div>
+      <div class="stat-grid">
+        <div class="stat"><div class="big" id="liveTotalPlayers">0</div><p>Live players online now</p></div>
+        <div class="stat"><div class="big" id="liveTotalGames">0</div><p>Active worlds</p></div>
+        <div class="stat"><div class="big" id="liveCreators">0</div><p>Creators publishing</p></div>
+        <div class="stat"><div class="big">Dark Gloss</div><p>Single premium visual system</p></div>
+      </div>
+    </section>
 
-<div id="gameArea">
-  <button id="clickButton" style="display: none;">Click Me!</button>
-</div>
+    <div class="layout">
+      <main>
+        <section id="games" class="section glass">
+          <h2>Discover Worlds (Live Player Counts)</h2>
+          <p>Counts refresh continuously to mirror active sessions across the platform.</p>
+          <div class="game-grid" id="gameGrid"></div>
+        </section>
 
-<script>
-  const startBtn = document.getElementById('startBtn');
-  const clickButton = document.getElementById('clickButton');
-  const scoreDisplay = document.getElementById('scoreDisplay');
-  const gameArea = document.getElementById('gameArea');
+        <section class="section glass" style="margin-top:16px;">
+          <h2>Community Feed</h2>
+          <p>Post updates from your account and follow creator announcements.</p>
+          <textarea id="postText" placeholder="Share what you built or what you're playing..."></textarea>
+          <button id="postBtn" style="margin-top:8px;">Post Update</button>
+          <div class="feed-list" id="feedList"></div>
+        </section>
 
-  let score = 0;
-  let gameActive = false;
-  let timer;
+        <section id="downloads" class="section glass" style="margin-top:16px;">
+          <h2>Download Clients</h2>
+          <p>Use website discovery, then launch through native player/creator apps like Roblox.</p>
+          <div class="download-grid">
+            <div class="item">
+              <span class="tag">PC Player Client</span>
+              <h3>VantaPlayerSetup.exe</h3>
+              <p>Dedicated game launcher/runtime for Windows.</p>
+              <a class="btn primary" href="downloads/VantaPlayerSetup.exe" download>Download .exe</a>
+            </div>
+            <div class="item">
+              <span class="tag">Creator Client</span>
+              <h3>VantaCreatorStudio.exe</h3>
+              <p>Windows-only game creation and publishing suite.</p>
+              <a class="btn primary" href="downloads/VantaCreatorStudio.exe" download>Download .exe</a>
+            </div>
+            <div class="item">
+              <span class="tag">Mobile Player</span>
+              <h3>VantaPlayerMobile</h3>
+              <p>iOS/Android package metadata and distribution info.</p>
+              <a class="btn" href="downloads/VantaPlayerMobile.txt" download>Get Mobile Info</a>
+            </div>
+          </div>
+        </section>
+      </main>
 
-  function moveButton() {
-    const maxX = gameArea.clientWidth - clickButton.offsetWidth;
-    const maxY = gameArea.clientHeight - clickButton.offsetHeight;
+      <aside>
+        <section class="section glass">
+          <h2>Profile</h2>
+          <div id="profilePanel" class="item">
+            <p>Sign in to set your avatar, bio, and social profile.</p>
+          </div>
+        </section>
 
-    const randomX = Math.random() * maxX;
-    const randomY = Math.random() * maxY;
+        <section class="section glass" style="margin-top:16px;">
+          <h2>Friends & Social</h2>
+          <input id="friendName" placeholder="Add friend by username" />
+          <button id="addFriendBtn" style="margin-top:8px;">Send Friend Request</button>
+          <div class="social-list" id="friendList"></div>
+        </section>
 
-    clickButton.style.left = `${randomX}px`;
-    clickButton.style.top = `${randomY}px`;
-  }
+        <section class="section glass" style="margin-top:16px;">
+          <h2>Direct Messages</h2>
+          <select id="dmTarget"></select>
+          <input id="dmText" placeholder="Send a message" />
+          <button id="sendDmBtn" style="margin-top:8px;">Send</button>
+          <div class="message-list" id="messageList"></div>
+        </section>
+      </aside>
+    </div>
 
-  clickButton.addEventListener('click', () => {
-    if (gameActive) {
-      score++;
-      scoreDisplay.textContent = `Score: ${score}`;
-      moveButton();
+    <footer>VantaCore • The ultimate social sandbox for creators and players.</footer>
+  </div>
+
+  <div id="authModal" class="modal">
+    <div class="modal-box glass">
+      <div class="tabs">
+        <button id="tabLogin" class="active">Login</button>
+        <button id="tabRegister">Create Account</button>
+      </div>
+
+      <div id="loginPanel">
+        <input id="loginUser" placeholder="Username" />
+        <input id="loginPass" type="password" placeholder="Password" />
+        <button id="loginBtn" style="margin-top:10px;">Login</button>
+      </div>
+
+      <div id="registerPanel" style="display:none;">
+        <div class="two">
+          <input id="regUser" placeholder="Username" />
+          <input id="regPass" type="password" placeholder="Password" />
+        </div>
+        <input id="regAvatar" placeholder="Profile picture URL (optional)" />
+        <textarea id="regBio" placeholder="Short bio"></textarea>
+        <button id="registerBtn" style="margin-top:10px;">Create Account</button>
+      </div>
+
+      <p id="authStatus" class="muted" style="margin-top:10px;"></p>
+      <button id="closeAuth" style="margin-top:10px;">Close</button>
+    </div>
+  </div>
+
+  <script>
+    const STORE = {
+      users: 'vc_users',
+      current: 'vc_current_user',
+      feed: 'vc_feed',
+      dms: 'vc_dms'
+    };
+
+    const defaultAvatar = 'https://api.dicebear.com/9.x/identicon/svg?seed=VantaCore';
+
+    const games = [
+      { id: 1, name: 'Neon City Tycoon', genre: 'Tycoon', players: 124540, likes: 94 },
+      { id: 2, name: 'SkyRaid Battlegrounds', genre: 'Action', players: 91220, likes: 91 },
+      { id: 3, name: 'Dungeon Forge RPG', genre: 'RPG', players: 78215, likes: 96 },
+      { id: 4, name: 'Velocity Obby Rush', genre: 'Obby', players: 66430, likes: 89 }
+    ];
+
+    const seedFeed = [
+      { user: 'VantaDev', text: 'Creator analytics update just dropped!', time: 'Just now' },
+      { user: 'SkyBuilder', text: 'My new map got featured today 🚀', time: '5m ago' }
+    ];
+
+    const $ = (id) => document.getElementById(id);
+
+    function getJson(key, fallback) {
+      try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch { return fallback; }
     }
-  });
 
-  startBtn.addEventListener('click', () => {
-    score = 0;
-    scoreDisplay.textContent = `Score: 0`;
-    clickButton.style.display = 'block';
-    gameActive = true;
-    moveButton();
+    function setJson(key, value) { localStorage.setItem(key, JSON.stringify(value)); }
 
-    clearTimeout(timer); // clear any existing timer
-    timer = setTimeout(() => {
-      gameActive = false;
-      clickButton.style.display = 'none';
-      alert(`Time's up! Your score is: ${score}`);
-    }, 10000); // 10 seconds
-  });
-</script>
+    function bootData() {
+      if (!localStorage.getItem(STORE.feed)) setJson(STORE.feed, seedFeed);
+      if (!localStorage.getItem(STORE.users)) {
+        setJson(STORE.users, [{
+          username: 'VantaDev',
+          password: 'demo',
+          avatar: defaultAvatar,
+          bio: 'Platform staff account',
+          friends: ['SkyBuilder'],
+          followers: 1123,
+          following: 86,
+          createdAt: new Date().toISOString()
+        }, {
+          username: 'SkyBuilder',
+          password: 'demo',
+          avatar: 'https://api.dicebear.com/9.x/identicon/svg?seed=SkyBuilder',
+          bio: 'Builder of floating islands.',
+          friends: ['VantaDev'],
+          followers: 489,
+          following: 52,
+          createdAt: new Date().toISOString()
+        }]);
+      }
+      if (!localStorage.getItem(STORE.dms)) setJson(STORE.dms, []);
+    }
 
+    function currentUser() { return localStorage.getItem(STORE.current); }
+
+    function getUser(name) {
+      return getJson(STORE.users, []).find(u => u.username === name);
+    }
+
+    function renderTopStats() {
+      const totalPlayers = games.reduce((a, g) => a + g.players, 0);
+      $('liveTotalPlayers').textContent = totalPlayers.toLocaleString();
+      $('liveTotalGames').textContent = games.length.toLocaleString();
+      $('liveCreators').textContent = Math.max(1200, Math.floor(totalPlayers / 115)).toLocaleString();
+    }
+
+    function renderGames() {
+      const grid = $('gameGrid');
+      grid.innerHTML = '';
+      games.forEach(g => {
+        const card = document.createElement('article');
+        card.className = 'game-card';
+        card.innerHTML = `
+          <span class="tag">${g.genre}</span>
+          <div class="row"><strong>${g.name}</strong><span class="player-count">${g.players.toLocaleString()} playing</span></div>
+          <p class="muted">${g.likes}% positive ratings • Live servers online</p>
+          <button style="margin-top:8px;">Play in VantaPlayer</button>
+        `;
+        grid.appendChild(card);
+      });
+      renderTopStats();
+    }
+
+    function renderFeed() {
+      const feed = getJson(STORE.feed, []);
+      const box = $('feedList');
+      box.innerHTML = '';
+      feed.slice().reverse().forEach(item => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = `<strong>${item.user}</strong><p>${item.text}</p><p class="muted">${item.time}</p>`;
+        box.appendChild(el);
+      });
+    }
+
+    function renderProfile() {
+      const name = currentUser();
+      const panel = $('profilePanel');
+      const welcome = $('welcome');
+      $('logoutBtn').style.display = name ? 'inline-block' : 'none';
+      $('openAuth').style.display = name ? 'none' : 'inline-block';
+
+      if (!name) {
+        welcome.textContent = 'Guest Mode';
+        panel.innerHTML = '<p>Sign in to set your avatar, bio, and social profile.</p>';
+        return;
+      }
+
+      const user = getUser(name);
+      if (!user) return;
+      welcome.textContent = `Signed in as @${name}`;
+      panel.innerHTML = `
+        <div class="inline">
+          <img class="avatar" src="${user.avatar || defaultAvatar}" alt="${name} avatar"/>
+          <div>
+            <strong>@${name}</strong>
+            <p class="muted">${user.bio || 'No bio yet'}</p>
+          </div>
+        </div>
+        <div class="row" style="margin-top:10px;">
+          <span>${user.friends.length} friends</span>
+          <span>${user.followers || 0} followers</span>
+          <span>${user.following || 0} following</span>
+        </div>
+      `;
+    }
+
+    function renderFriends() {
+      const me = currentUser();
+      const list = $('friendList');
+      const target = $('dmTarget');
+      list.innerHTML = '';
+      target.innerHTML = '';
+      if (!me) {
+        list.innerHTML = '<div class="item"><p>Login required for social features.</p></div>';
+        return;
+      }
+
+      const user = getUser(me);
+      if (!user || user.friends.length === 0) {
+        list.innerHTML = '<div class="item"><p>No friends yet. Add someone by username.</p></div>';
+      } else {
+        user.friends.forEach(friend => {
+          const u = getUser(friend);
+          const el = document.createElement('div');
+          el.className = 'item';
+          el.innerHTML = `<div class="inline"><img class="avatar" src="${(u && u.avatar) || defaultAvatar}" alt="avatar"><div><strong>@${friend}</strong><p class="muted">Online</p></div></div>`;
+          list.appendChild(el);
+
+          const opt = document.createElement('option');
+          opt.value = friend;
+          opt.textContent = friend;
+          target.appendChild(opt);
+        });
+      }
+    }
+
+    function renderDms() {
+      const me = currentUser();
+      const box = $('messageList');
+      box.innerHTML = '';
+      if (!me) {
+        box.innerHTML = '<div class="item"><p>Login to send messages.</p></div>';
+        return;
+      }
+      const dms = getJson(STORE.dms, []).filter(m => m.from === me || m.to === me).slice(-6).reverse();
+      if (!dms.length) {
+        box.innerHTML = '<div class="item"><p>No messages yet.</p></div>';
+        return;
+      }
+      dms.forEach(m => {
+        const el = document.createElement('div');
+        el.className = 'item';
+        el.innerHTML = `<strong>${m.from} → ${m.to}</strong><p>${m.text}</p><p class="muted">${m.time}</p>`;
+        box.appendChild(el);
+      });
+    }
+
+    function openModal(on=true) { $('authModal').classList.toggle('active', on); $('authStatus').textContent = ''; }
+
+    function setAuthTab(type) {
+      const login = type === 'login';
+      $('loginPanel').style.display = login ? 'block' : 'none';
+      $('registerPanel').style.display = login ? 'none' : 'block';
+      $('tabLogin').classList.toggle('active', login);
+      $('tabRegister').classList.toggle('active', !login);
+    }
+
+    function login() {
+      const username = $('loginUser').value.trim();
+      const password = $('loginPass').value;
+      const user = getUser(username);
+      if (!user || user.password !== password) {
+        $('authStatus').textContent = 'Invalid username or password.';
+        return;
+      }
+      localStorage.setItem(STORE.current, username);
+      openModal(false);
+      renderAll();
+    }
+
+    function register() {
+      const username = $('regUser').value.trim();
+      const password = $('regPass').value;
+      const avatar = $('regAvatar').value.trim() || `https://api.dicebear.com/9.x/identicon/svg?seed=${encodeURIComponent(username || 'user')}`;
+      const bio = $('regBio').value.trim();
+      if (!username || !password) {
+        $('authStatus').textContent = 'Username and password are required.';
+        return;
+      }
+      const users = getJson(STORE.users, []);
+      if (users.some(u => u.username.toLowerCase() === username.toLowerCase())) {
+        $('authStatus').textContent = 'Username already exists.';
+        return;
+      }
+      users.push({ username, password, avatar, bio, friends: [], followers: 0, following: 0, createdAt: new Date().toISOString() });
+      setJson(STORE.users, users);
+      localStorage.setItem(STORE.current, username);
+      openModal(false);
+      renderAll();
+    }
+
+    function addFriend() {
+      const me = currentUser();
+      const friend = $('friendName').value.trim();
+      if (!me) return alert('Login required.');
+      if (!friend || friend === me) return alert('Enter a valid username.');
+      const users = getJson(STORE.users, []);
+      const meUser = users.find(u => u.username === me);
+      const friendUser = users.find(u => u.username === friend);
+      if (!friendUser) return alert('User not found.');
+      if (!meUser.friends.includes(friend)) meUser.friends.push(friend);
+      if (!friendUser.friends.includes(me)) friendUser.friends.push(me);
+      meUser.following = (meUser.following || 0) + 1;
+      friendUser.followers = (friendUser.followers || 0) + 1;
+      setJson(STORE.users, users);
+      $('friendName').value = '';
+      renderAll();
+    }
+
+    function postUpdate() {
+      const me = currentUser();
+      const text = $('postText').value.trim();
+      if (!me) return alert('Login required to post.');
+      if (!text) return;
+      const feed = getJson(STORE.feed, []);
+      feed.push({ user: me, text, time: new Date().toLocaleString() });
+      setJson(STORE.feed, feed);
+      $('postText').value = '';
+      renderFeed();
+    }
+
+    function sendDm() {
+      const me = currentUser();
+      const to = $('dmTarget').value;
+      const text = $('dmText').value.trim();
+      if (!me) return alert('Login required.');
+      if (!to) return alert('Choose a friend first.');
+      if (!text) return;
+      const dms = getJson(STORE.dms, []);
+      dms.push({ from: me, to, text, time: new Date().toLocaleTimeString() });
+      setJson(STORE.dms, dms);
+      $('dmText').value = '';
+      renderDms();
+    }
+
+    function fluctuatePlayers() {
+      games.forEach(g => {
+        const delta = Math.floor((Math.random() * 2800) - 1200);
+        g.players = Math.max(1000, g.players + delta);
+      });
+      renderGames();
+    }
+
+    function renderAll() {
+      renderGames();
+      renderFeed();
+      renderProfile();
+      renderFriends();
+      renderDms();
+    }
+
+    bootData();
+    renderAll();
+    setInterval(fluctuatePlayers, 5000);
+
+    $('openAuth').onclick = () => openModal(true);
+    $('closeAuth').onclick = () => openModal(false);
+    $('logoutBtn').onclick = () => { localStorage.removeItem(STORE.current); renderAll(); };
+    $('tabLogin').onclick = () => setAuthTab('login');
+    $('tabRegister').onclick = () => setAuthTab('register');
+    $('loginBtn').onclick = login;
+    $('registerBtn').onclick = register;
+    $('postBtn').onclick = postUpdate;
+    $('addFriendBtn').onclick = addFriend;
+    $('sendDmBtn').onclick = sendDm;
+  </script>
 </body>
 </html>
